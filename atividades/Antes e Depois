@@ -1,0 +1,61 @@
+use store
+
+db.customers.insertMany([
+  {
+    "name": "Ana",
+    "age": 25,
+    "city": "Salvador",
+    "active": true,
+    "points": 120
+  },
+
+  {
+    "name": "Bruno",
+    "age": 32,
+    "city": "Feira de Santana",
+    "active": true,
+    "points": 300
+  },
+
+  {
+    "name": "Carlos",
+    "age": 28,
+    "city": "Salvador",
+    "active": false,
+    "points": 80
+  },
+
+  {
+    "name": "Daniela",
+    "age": 40,
+    "city": "São Paulo",
+    "active": true,
+    "points": 500
+  },
+
+  {
+      "name": "Eduarda",
+    "age": 22,
+    "city": "Rio de Janeiro",
+    "active": false,
+    "points": 50
+  }
+])
+
+db.customers.find()
+
+db.customers.find({"city": "Salvador" }, {"name" : "Ana"}, {"name" : "Carlos"}, {"city" : "Salvador"})
+
+db.customers.updateOne({"name" : "Carlos"}, {$set: {"name" : "carlos"}})
+
+db.customers.updateMany({}, {$set: {"city" : "BA"}})
+
+db.customers.updateOne({ name: "Ana" },{ $inc: { points: 50 } })
+
+db.customers.insertOne({"name" : "money", "amount": 20.3})
+
+db.customers.deleteOne({"name" : "Eduarda"})
+
+db.customers.updateOne({name: "Daniela"}, {$set: {vip: true}})
+
+db.products.deleteOne({name: "Daniela"}, {$unset: {points: ""}})
