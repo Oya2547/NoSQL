@@ -58,3 +58,54 @@ Database: book_store
 └── Collections: Books
     ├── Documents: { ... }
     └── Documents: { ... }
+
+
+# MongoDB: Modelagem & Schemas
+
+## 1. Visão Geral do MongoDB
+* **Banco de Dados NoSQL:** Orientado a documentos no formato BSON (Binary JSON).
+* **Flexibilidade:** Suporta *Schema-less* (estrutura dinâmica por documento).
+* **Escalabilidade & Disponibilidade:** Suporte nativo a *Replica Sets* (alta disponibilidade) e *Sharding* (escala horizontal).
+
+---
+
+## 2. Estratégias de Modelagem
+
+### Embutimento (Embedding / Denormalization)
+Documentos relacionados ficam dentro do próprio documento principal.
+* **Vantagens:** Alta performance em leitura e operações atômicas.
+* **Uso:** Relações 1:1, 1:Poucos e dados lidos conjuntamente.
+* **Atenção:** Respeite o limite de 16 MB por documento.
+
+### Referenciamento (Referencing / Normalization)
+Armazena referências (`ObjectId`) apontando para outras coleções.
+* **Vantagens:** Evita duplicação e reduz o tamanho dos documentos.
+* **Uso:** Relações 1:Muitos, N:M ou dados que mudam frequentemente.
+* **Atenção:** Pode exigir o uso de `$lookup` (JOIN) na aplicação.
+
+---
+
+## 3. Padrões de Projeto (Design Patterns)
+* **Extended Reference:** Copia os campos mais consultados da referência para evitar `$lookup`.
+* **Subset Pattern:** Mantém apenas os itens mais acessados no documento (ex.: 10 comentários recentes).
+* **Attribute Pattern:** Transforma atributos variáveis em arrays de chave/valor.
+* **Bucket Pattern:** Agrupa dados por intervalos de tempo (ideal para Séries Temporais/IoT).
+
+---
+
+## 4. Validação de Schemas (`$jsonSchema`)
+Garante integridade e regras de negócio direto na coleção:
+
+```javascript
+db.createCollection("usuarios", {
+  validator: {
+    $jsonSchema: {
+      bsonType: "object",
+      required: ["nome", "email"],
+      properties: {
+        nome: { bsonType: "string" },
+        email: { bsonType: "string", pattern: "^.+@.+\\..+$" }
+      }
+    }
+  }
+});
