@@ -50,7 +50,7 @@ Diferentemente dos bancos de dados relacionais tradicionais (como MySQL ou Postg
 * Um servidor MongoDB pode hospedar múltiplos bancos de dados.
 * Cada banco de dados contém coleções (collections), e cada coleção armazena documentos (documents).
 
-```text
+text
 Database: book_store
 ├── Collections: Users
 │   ├── Documents: { name: "Jefté", age: 33 }
